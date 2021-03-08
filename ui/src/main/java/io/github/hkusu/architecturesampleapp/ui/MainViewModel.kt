@@ -1,4 +1,4 @@
-package io.github.hkusu.architecturesampleapp
+package io.github.hkusu.architecturesampleapp.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

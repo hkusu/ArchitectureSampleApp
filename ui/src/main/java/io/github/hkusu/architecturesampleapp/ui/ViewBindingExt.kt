@@ -1,4 +1,4 @@
-package io.github.hkusu.architecturesampleapp
+package io.github.hkusu.architecturesampleapp.ui
 
 import android.view.View
 import android.view.ViewGroup
