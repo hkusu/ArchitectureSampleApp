@@ -16,6 +16,10 @@
                 android:name="io.github.hkusu.architecturesampleapp.TimberInitializer"
                 android:value="androidx.startup"
                 />
+            <meta-data
+                android:name="io.github.hkusu.architecturesampleapp.FlipperInitializer"
+                android:value="androidx.startup"
+                />
         </provider>
     </application>
 
