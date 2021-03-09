@@ -1,5 +1,7 @@
 package io.github.hkusu.architecturesampleapp.data.di
 
+import android.content.Context
+import androidx.datastore.preferences.preferencesDataStore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -21,7 +23,6 @@ internal abstract class RepositoryModule {
     abstract fun bindUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
 }
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 internal object ApiModule {
@@ -31,6 +32,8 @@ internal object ApiModule {
         return GitHubApi(Libs.httpClient)
     }
 }
+
+internal val Context.mainDataStore by preferencesDataStore("main")
 
 private object Libs {
 
