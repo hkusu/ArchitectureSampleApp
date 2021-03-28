@@ -1,7 +1,5 @@
 package io.github.hkusu.architecturesampleapp.data.di
 
-import android.content.Context
-import androidx.datastore.preferences.preferencesDataStore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -14,6 +12,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import kotlinx.serialization.json.Json
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -25,39 +24,27 @@ internal abstract class RepositoryModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object ApiModule {
+internal object DataModule {
 
     @Provides
-    fun provideGitHubApi(): GitHubApi {
-        return GitHubApi(Libs.httpClient)
+    fun provideGitHubApi(httpClientWrapper: HttpClientWrapper): GitHubApi {
+        return GitHubApi(httpClientWrapper.httpClient)
     }
-}
 
-internal val Context.mainDataStore by preferencesDataStore("main")
-
-private object Libs {
-
-    // appモジュールからKtorのHttpClientクラスを参照できないのでDaggerの@Providesアノテーションでは配布しない
-    // singleton
-    val httpClient: HttpClient by lazy {
-        HttpClient {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer(json = Json {
-                    ignoreUnknownKeys = true
-                })
+    @Singleton
+    @Provides
+    fun provideHttpClient(): HttpClientWrapper {
+        return HttpClientWrapper(
+            HttpClient {
+                install(JsonFeature) {
+                    serializer = KotlinxSerializer(json = Json {
+                        ignoreUnknownKeys = true
+                    })
+                }
             }
-        }
+        )
     }
 
-    // singleton にしない場合
-    // val httpClient: HttpClient
-    //     get() {
-    //         return HttpClient {
-    //             install(JsonFeature) {
-    //                 serializer = KotlinxSerializer(json = Json {
-    //                     ignoreUnknownKeys = true
-    //                 })
-    //             }
-    //         }
-    //     }
+    // appモジュールから参照できずDIに失敗する為
+    class HttpClientWrapper(val httpClient: HttpClient)
 }
