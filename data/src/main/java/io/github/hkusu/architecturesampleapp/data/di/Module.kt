@@ -9,6 +9,7 @@ import io.github.hkusu.architecturesampleapp.data.api.GitHubApi
 import io.github.hkusu.architecturesampleapp.data.repository.UserRepositoryImpl
 import io.github.hkusu.architecturesampleapp.model.repository.UserRepository
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import kotlinx.serialization.json.Json
@@ -35,7 +36,9 @@ internal object DataModule {
     @Provides
     fun provideHttpClient(): HttpClientWrapper {
         return HttpClientWrapper(
-            HttpClient {
+            HttpClient(OkHttp) {
+                engine {
+                }
                 install(JsonFeature) {
                     serializer = KotlinxSerializer(json = Json {
                         ignoreUnknownKeys = true
