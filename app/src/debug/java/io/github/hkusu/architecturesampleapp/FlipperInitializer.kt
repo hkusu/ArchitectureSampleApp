@@ -13,7 +13,7 @@ class FlipperInitializer : Initializer<Unit> {
         SoLoader.init(context, false)
         if (FlipperUtils.shouldEnableFlipper(context)) {
             AndroidFlipperClient.getInstance(context).apply {
-                // addPlugin(SharedPreferencesFlipperPlugin(context)) 現状ではDataStoreのパスに対応していない
+                // addPlugin(SharedPreferencesFlipperPlugin(context)) 現状ではDataStoreの保存ファイルのパスに対応していない
                 addPlugin(DatabasesFlipperPlugin(context))
             }.start()
         }
