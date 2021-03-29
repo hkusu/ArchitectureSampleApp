@@ -29,18 +29,22 @@ internal abstract class RepositoryModule {
 internal object DataModule {
 
     @Provides
-    fun provideGitHubApi(httpClientWrapper: HttpClientWrapper): GitHubApi {
-        return GitHubApi(httpClientWrapper.httpClient)
+    fun provideGitHubApi(httpClientDIWrapper: HttpClientDIWrapper): GitHubApi {
+        return GitHubApi(httpClientDIWrapper.httpClient)
     }
 
     @Singleton
     @Provides
-    fun provideHttpClient(networkInterceptors: NetworkInterceptors): HttpClientWrapper {
-        return HttpClientWrapper(
-            HttpClient(OkHttp) {
+    fun provideHttpClient(networkInterceptorsDIWrapper: NetworkInterceptorsDIWrapper): HttpClientDIWrapper {
+        return object : HttpClientDIWrapper {
+            override val httpClient: HttpClient = HttpClient(OkHttp) {
                 engine {
-                    networkInterceptors.interceptors.forEach { any ->
-                        (any as? Interceptor)?.let { interceptor -> addNetworkInterceptor(interceptor) }
+                    networkInterceptorsDIWrapper.interceptors.forEach { any ->
+                        (any as? Interceptor)?.let { interceptor ->
+                            addNetworkInterceptor(
+                                interceptor
+                            )
+                        }
                     }
                 }
                 install(JsonFeature) {
@@ -49,14 +53,16 @@ internal object DataModule {
                     })
                 }
             }
-        )
+        }
     }
 
     // appモジュールから参照できずDIに失敗する為
-    class HttpClientWrapper(val httpClient: HttpClient)
+    interface HttpClientDIWrapper {
+        val httpClient: HttpClient
+    }
 }
 
 // app モジュールで実体を配信
-interface NetworkInterceptors {
+interface NetworkInterceptorsDIWrapper {
     val interceptors: List<Any> // app モジュールからは OkHttp を認識できないので Any を利用
 }

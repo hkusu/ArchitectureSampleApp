@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.hkusu.architecturesampleapp.data.di.NetworkInterceptors
+import io.github.hkusu.architecturesampleapp.data.di.NetworkInterceptorsDIWrapper
 import javax.inject.Singleton
 
 @Module
@@ -14,8 +14,8 @@ import javax.inject.Singleton
 object DebugModule {
 
     @Provides
-    fun provideNetworkInterceptors(networkFlipperPlugin: NetworkFlipperPlugin): NetworkInterceptors {
-        return object : NetworkInterceptors {
+    fun provideNetworkInterceptors(networkFlipperPlugin: NetworkFlipperPlugin): NetworkInterceptorsDIWrapper {
+        return object : NetworkInterceptorsDIWrapper {
             override val interceptors: List<Any> = listOf(
                 FlipperOkhttpInterceptor(networkFlipperPlugin)
             )

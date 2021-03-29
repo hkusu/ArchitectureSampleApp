@@ -4,15 +4,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.hkusu.architecturesampleapp.data.di.NetworkInterceptors
+import io.github.hkusu.architecturesampleapp.data.di.NetworkInterceptorsDIWrapper
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ReleaseModule {
 
     @Provides
-    fun provideNetworkInterceptors(): NetworkInterceptors {
-        return object : NetworkInterceptors {
+    fun provideNetworkInterceptors(): NetworkInterceptorsDIWrapper {
+        return object : NetworkInterceptorsDIWrapper {
             override val interceptors: List<Any> = emptyList()
         }
     }
