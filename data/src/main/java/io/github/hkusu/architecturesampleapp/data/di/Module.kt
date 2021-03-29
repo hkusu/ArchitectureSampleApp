@@ -13,6 +13,7 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import javax.inject.Singleton
 
 @Module
@@ -34,10 +35,13 @@ internal object DataModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient(): HttpClientWrapper {
+    fun provideHttpClient(networkInterceptors: NetworkInterceptors): HttpClientWrapper {
         return HttpClientWrapper(
             HttpClient(OkHttp) {
                 engine {
+                    networkInterceptors.interceptors.forEach { any ->
+                        (any as? Interceptor)?.let { interceptor -> addNetworkInterceptor(interceptor) }
+                    }
                 }
                 install(JsonFeature) {
                     serializer = KotlinxSerializer(json = Json {
@@ -50,4 +54,9 @@ internal object DataModule {
 
     // appモジュールから参照できずDIに失敗する為
     class HttpClientWrapper(val httpClient: HttpClient)
+}
+
+// app モジュールで実体を配信
+interface NetworkInterceptors {
+    val interceptors: List<Any> // app モジュールからは OkHttp を認識できないので Any を利用
 }

@@ -24,10 +24,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -47,8 +49,9 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:4.7.1"
 
-    debugImplementation 'com.facebook.flipper:flipper:0.79.1'
+    debugImplementation 'com.facebook.flipper:flipper:0.82.1'
     debugImplementation 'com.facebook.soloader:soloader:0.10.1'
+    debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.82.1'
 
     implementation "com.google.dagger:hilt-android:2.31.2-alpha"
     kapt "com.google.dagger:hilt-android-compiler:2.31.2-alpha"
