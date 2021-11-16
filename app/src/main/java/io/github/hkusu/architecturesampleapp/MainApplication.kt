@@ -5,3 +5,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MainApplication: Application()
+
+fun plus(a: Int, b:Int): Int {
+    return a + b
+}
