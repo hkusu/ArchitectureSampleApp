@@ -7,6 +7,6 @@ import dagger.hilt.android.HiltAndroidApp
 class MainApplication: Application()
 
 fun plus(a: Int, b:Int): Int {
-    return a + b
+    return a + b + 1
 }
 
